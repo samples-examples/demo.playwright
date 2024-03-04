@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
 
 test.beforeEach(async ({page}) => {
-  await page.goto('https://todomvc.com/examples/vanilla-es6/');
+  await page.goto('https://todomvc.com/examples/react/dist/');
 });
 
 /**
@@ -29,23 +29,22 @@ test('basic interaction', async ({page}) => {
  */
 test('element selectors', async ({page}) => {
   // When no selector engine is specified, Playwright will use the css selector engine.
-  await page.type('.header input', 'Learn Playwright');
+  await page.locator('.header input').fill('Learn Playwright');
   // So the selector above is the same as the following:
-  await page.press('css=.header input', 'Enter');
+  await page.locator('css=.header input').press('Enter');
 
   // select by text with the text selector engine:
-  await page.click('text=All');
+  await page.getByRole('link', { name: 'All' }).click();
 
-  // Combine css and text selectors (https://playwright.dev/docs/selectors/#text-selector)
-  await page.click('.todo-list > li:has-text("Playwright")');
-  await page.click('.todoapp .footer >> text=Completed');
+  await page.locator('.todo-list > li').filter({ hasText: 'Playwright'}).click();
+  await page.locator('.todoapp .footer', { hasText: 'Completed'}).click();
 
   // Selecting based on layout, with css selector
   expect(await page.innerText('a:right-of(:text("Active"))')).toBe('Completed');
 
   // Only visible elements, with css selector
-  await page.click('text=Completed >> visible=true');
+  await page.getByText('Completed', { exact: true }).click();
 
   // XPath selector
-  await page.click('xpath=//html/body/section/section/label');
+  await page.getByTestId('text-input').click();
 });

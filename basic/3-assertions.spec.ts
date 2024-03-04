@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
 
 test.beforeEach(async ({page}) => {
-  await page.goto('https://todomvc.com/examples/vanilla-es6/');
+  await page.goto('https://todomvc.com/examples/react/dist/');
 });
 
 /**
@@ -10,8 +10,8 @@ test.beforeEach(async ({page}) => {
  */
 test('should be able to use assertions', async ({page}) => {
   await test.step('toHaveTitle/toHaveURL', async () => {
-    await expect(page).toHaveTitle('Vanilla ES6 • TodoMVC');
-    await expect(page).toHaveURL('https://todomvc.com/examples/vanilla-es6/');
+    await expect(page).toHaveTitle('TodoMVC: React');
+    await expect(page).toHaveURL('https://todomvc.com/examples/react/dist/');
   });
 
   await test.step('toBeEmpty/toHaveValue', async () => {
@@ -31,21 +31,22 @@ test('should be able to use assertions', async ({page}) => {
   });
 
   await test.step('toBeChecked', async () => {
-    const firstItemCheckbox = page.locator('input[type=checkbox]:left-of(:text("Buy milk"))');
+    const firstItemCheckbox = page.getByTestId('todo-item-toggle');
+    // const firstItemCheckbox = page.locator('input[type=checkbox]:left-of(:text("Buy milk"))');
     await expect(firstItemCheckbox).not.toBeChecked();
     await page.check('div input[type="checkbox"]');
     await expect(firstItemCheckbox).toBeChecked();
   });
 
   await test.step('toBeVisible/toBeHidden', async () => {
-    await expect(page.locator('text=Buy milk')).toBeVisible();
-    await page.click('text=Active');
-    await expect(page.locator('text=Buy milk')).toBeHidden();
+    await expect(page.getByText('Buy milk', { exact: true})).toBeVisible();
+    await page.getByText('Active', { exact: true }).click();
+    await expect(page.getByText('Buy milk', { exact: true})).toBeHidden();
   });
 
   await test.step('toHaveClass/toHaveCSS', async () => {
-    await expect(page.locator('[placeholder="What needs to be done?"]')).toHaveClass('new-todo');
-    await page.click('text=Clear completed');
-    await expect(page.locator('.main')).toHaveCSS('display', 'none');
+    await expect(page.getByPlaceholder('What needs to be done?')).toHaveClass('new-todo');
+    await page.getByText('Clear completed', {exact: true }).click();
+    await expect(page.locator('ul.todo-list')).toHaveCSS('height', '0px');
   });
 });

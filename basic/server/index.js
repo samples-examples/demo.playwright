@@ -31,7 +31,7 @@ class Server {
         break;
 
       default:
-        const localFilePath = path.join(__dirname, 'assets', req.url === '/' ? 'index.html' : req.url);
+        const localFilePath = path.join(__dirname, 'assets', req.url === '/' ? 'index.html' : req.url??'');
         function shouldServe() {
           try {
             const result = fs.statSync(localFilePath)

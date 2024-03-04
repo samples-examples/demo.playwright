@@ -1,6 +1,6 @@
 import {test, expect} from '@playwright/test';
 
-const fileToUpload = __filename; // '__filename' is the current test file.
+const fileToUpload = __dirname + '/upload.txt'; // '__filename' is the current test file.
 
 /**
  * In this test we wait for an file chooser to appear while we click on an
@@ -8,12 +8,12 @@ const fileToUpload = __filename; // '__filename' is the current test file.
  * @see https://playwright.dev/docs/api/class-filechooser
  */
 test('should be able to upload files', async ({page, context}) => {
-  await page.goto('/file-uploads.html');
+  await page.goto('https://cgi-lib.berkeley.edu/ex/fup.html');
   const [fileChooser] = await Promise.all([
     page.waitForEvent('filechooser'),
-    page.click('input'),
+    page.click('input[type=file]'),
   ]);
   await fileChooser.setFiles(fileToUpload);
-  await page.click('input[type=submit]');
-  await expect(page.locator('text=4-file-uploads.spec.ts')).toBeVisible();
+  await page.locator('input[type=submit]').click();
+  await expect(page.getByText('Uploaded', { exact: true })).toBeVisible();
 });

@@ -5,7 +5,7 @@
 import { test, expect } from '@playwright/test';
 
 test('W3 schools logo should drag and drop', async ({ page }) => {
-  await page.goto('');
+  await page.goto('html5_draganddrop.asp');
   // drag image by id, and drop it to div with id 'div2'
   await page.dragAndDrop('#drag1', '#div2');
   // verify that div2 contains the image
@@ -13,5 +13,5 @@ test('W3 schools logo should drag and drop', async ({ page }) => {
   // reverse and drag from div2, back to div1
   await page.dragAndDrop('#drag1', '#div1');
   // verify that div2 contains the image
-  expect(page.locator('#div1.#drag1')).toBeTruthy();
+  expect(page.locator('#div1 > #drag1')).toBeTruthy();
 });
