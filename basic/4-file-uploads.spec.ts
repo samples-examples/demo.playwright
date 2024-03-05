@@ -17,3 +17,13 @@ test('should be able to upload files', async ({page, context}) => {
   await page.locator('input[type=submit]').click();
   await expect(page.getByText('Uploaded', { exact: true })).toBeVisible();
 });
+
+/*
+// Start waiting for download before clicking. Note no await.
+const downloadPromise = page.waitForEvent('download');
+await page.getByText('Download file').click();
+const download = await downloadPromise;
+
+// Wait for the download process to complete and save the downloaded file somewhere.
+await download.saveAs('/path/to/save/at/' + download.suggestedFilename());
+*/
